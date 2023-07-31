@@ -20,20 +20,28 @@ for (let i = 0; i < particleTypes.length; i++) {
 
 // Fungsi untuk mengecek dan menggabungkan objek yang bertabrakan
 function checkCollisions() {
-  let newParticles = [];
   for (let i = 0; i < particles.length; i++) {
-    let particle = { ...particles[i] };
     for (let j = i + 1; j < particles.length; j++) {
-      if (particles[i].x < particles[j].x + particleSize &&
-          particles[i].x + particleSize > particles[j].x &&
-          particles[i].y < particles[j].y + particleSize &&
-          particles[i].y + particleSize > particles[j].y &&
-          particles[i].type !== particles[j].type) {
+      if (
+        particles[i].x < particles[j].x + particleSize &&
+        particles[i].x + particleSize > particles[j].x &&
+        particles[i].y < particles[j].y + particleSize &&
+        particles[i].y + particleSize > particles[j].y &&
+        particles[i].type !== particles[j].type
+      ) {
         const winnerType = getWinnerType(particles[i].type, particles[j].type);
         if (winnerType !== null) {
-          particle.type = winnerType;
+          if (particles[i].type === winnerType) {
+            particles[j].type = winnerType;
+          } else {
+            particles[i].type = winnerType;
+          }
         }
       }
+    }
+  }
+}
+
     }
     newParticles.push(particle);
   }
