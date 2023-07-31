@@ -27,9 +27,7 @@ function checkCollisions() {
           particles[i].y < particles[j].y + particleSize &&
           particles[i].y + particleSize > particles[j].y &&
           particles[i].type !== particles[j].type) {
-        particles[i].type = getWinnerType(particles[i].type, particles[j].type);
-        particles.splice(j, 1);
-        j--;
+        particles[j].type = getWinnerType(particles[i].type, particles[j].type);
       }
     }
   }
@@ -42,9 +40,9 @@ function getWinnerType(type1, type2) {
   const index2 = typesOrder.indexOf(type2);
 
   if ((index1 + 1) % 3 === index2) {
-    return type2;
+    return type1; // Type1 (👊) menang
   } else if ((index2 + 1) % 3 === index1) {
-    return type1;
+    return type2; // Type2 (🤚) menang
   } else {
     return type1; // Kembalikan type1 jika hasil imbang
   }
