@@ -42,22 +42,16 @@ function checkCollisions() {
   }
 }
 
-    }
-    newParticles.push(particle);
-  }
-  particles = newParticles;
-}
-
 // Fungsi untuk menentukan jenis objek yang menang
 function getWinnerType(type1, type2) {
   if (type1 === '👊' && type2 === '✌️') {
-    return '👊'; // Jika 👊 bertabrakan dengan ✌️,  👊 yang menang
+    return '👊';
   } else if (type1 === '✌️' && type2 === '🤚') {
-    return '✌️'; // Jika ✌️ bertabrakan dengan 🤚,  ✌️ yang menang
+    return '✌️';
   } else if (type1 === '🤚' && type2 === '👊') {
-    return '🤚'; // Jika 🤚 bertabrakan dengan 👊,  🤚 yang menang
+    return '🤚';
   } else {
-    return null; // Jika hasil imbang, kembalikan null
+    return null;
   }
 }
 
