@@ -20,7 +20,9 @@ for (let i = 0; i < particleTypes.length; i++) {
 
 // Fungsi untuk mengecek dan menggabungkan objek yang bertabrakan
 function checkCollisions() {
+  let newParticles = [];
   for (let i = 0; i < particles.length; i++) {
+    let particle = { ...particles[i] };
     for (let j = i + 1; j < particles.length; j++) {
       if (particles[i].x < particles[j].x + particleSize &&
           particles[i].x + particleSize > particles[j].x &&
@@ -28,11 +30,14 @@ function checkCollisions() {
           particles[i].y + particleSize > particles[j].y &&
           particles[i].type !== particles[j].type) {
         const winnerType = getWinnerType(particles[i].type, particles[j].type);
-        particles[j].type = winnerType === particles[i].type ? particles[j].type : winnerType;
-        particles[i].type = winnerType === particles[j].type ? particles[i].type : winnerType;
+        if (winnerType !== null) {
+          particle.type = winnerType;
+        }
       }
     }
+    newParticles.push(particle);
   }
+  particles = newParticles;
 }
 
 // Fungsi untuk menentukan jenis objek yang menang
