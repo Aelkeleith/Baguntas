@@ -36,14 +36,12 @@ function checkCollisions() {
 
 // Fungsi untuk menentukan jenis objek yang menang
 function getWinnerType(type1, type2) {
-  if (type1 === '👊') {
-    return type1; // Jika 👊 bertabrakan dengan apa pun, 👊 yang menang
-  } else if (type2 === '👊') {
-    return type2; // Jika apa pun bertabrakan dengan 👊, 👊 yang menang
-  } else if (type1 === '✌️') {
-    return type1; // Jika ✌️ bertabrakan dengan apa pun, ✌️ yang menang
-  } else if (type2 === '✌️') {
-    return type2; // Jika apa pun bertabrakan dengan ✌️, ✌️ yang menang
+  if (type1 === '👊' && type2 === '✌️') {
+    return '👊'; // Jika 👊 bertabrakan dengan ✌️,  👊 yang menang
+  } else if (type1 === '✌️' && type2 === '🤚') {
+    return '✌️'; // Jika ✌️ bertabrakan dengan 🤚,  ✌️ yang menang
+  } else if (type1 === '🤚' && type2 === '👊') {
+    return '🤚'; // Jika 🤚 bertabrakan dengan 👊,  🤚 yang menang
   } else {
     return type1; // Kembalikan type1 jika hasil imbang
   }
@@ -51,14 +49,12 @@ function getWinnerType(type1, type2) {
 
 // Fungsi untuk menentukan jenis objek yang kalah
 function getLoserType(type1, type2) {
-  if (type1 === '👊') {
-    return '✌️'; // Jika 👊 bertabrakan dengan apa pun, ✌️ yang kalah
-  } else if (type2 === '👊') {
-    return '✌️'; // Jika apa pun bertabrakan dengan 👊, ✌️ yang kalah
-  } else if (type1 === '✌️') {
-    return '🤚'; // Jika ✌️ bertabrakan dengan apa pun, 🤚 yang kalah
-  } else if (type2 === '✌️') {
-    return '🤚'; // Jika apa pun bertabrakan dengan ✌️, 🤚 yang kalah
+  if (type1 === '👊' && type2 === '✌️') {
+    return '✌️'; // Jika 👊 bertabrakan dengan ✌️,  ✌️ yang kalah
+  } else if (type1 === '✌️' && type2 === '🤚') {
+    return '🤚'; // Jika ✌️ bertabrakan dengan 🤚,  🤚 yang kalah
+  } else if (type1 === '🤚' && type2 === '👊') {
+    return '👊'; // Jika 🤚 bertabrakan dengan 👊,  👊 yang kalah
   } else {
     return type1; // Kembalikan type1 jika hasil imbang
   }
@@ -110,4 +106,13 @@ function hasGameEnded() {
 
 // Fungsi untuk menampilkan pemenang permainan
 function displayWinner() {
-  const winnerType = particles
+  const uniqueTypes = new Set(particles.map(particle => particle.type));
+  const winnerType = [...uniqueTypes][0];
+
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.font = '30px Arial';
+  ctx.fillText(`Pemenang: ${winnerType}`, canvas.width / 2 - 70, canvas.height / 2);
+}
+
+// Jalankan permainan
+gameLoop();
