@@ -27,8 +27,9 @@ function checkCollisions() {
           particles[i].y < particles[j].y + particleSize &&
           particles[i].y + particleSize > particles[j].y &&
           particles[i].type !== particles[j].type) {
-        particles[j].type = getWinnerType(particles[i].type, particles[j].type);
-        particles[i].type = getLoserType(particles[i].type, particles[j].type);
+        const winnerType = getWinnerType(particles[i].type, particles[j].type);
+        particles[j].type = winnerType === particles[i].type ? particles[j].type : winnerType;
+        particles[i].type = winnerType === particles[j].type ? particles[i].type : winnerType;
       }
     }
   }
@@ -37,51 +38,13 @@ function checkCollisions() {
 // Fungsi untuk menentukan jenis objek yang menang
 function getWinnerType(type1, type2) {
   if (type1 === '👊' && type2 === '✌️') {
-    return '👊'; // Jika 👊 bertabrakan dengan ✌️, 👊 yang menang
+    return '👊'; // Jika 👊 bertabrakan dengan ✌️,  👊 yang menang
   } else if (type1 === '✌️' && type2 === '🤚') {
-    return '✌️'; // Jika ✌️ bertabrakan dengan 🤚, ✌️ yang menang
+    return '✌️'; // Jika ✌️ bertabrakan dengan 🤚,  ✌️ yang menang
   } else if (type1 === '🤚' && type2 === '👊') {
-    return '🤚'; // Jika 🤚 bertabrakan dengan 👊, 🤚 yang menang
-  } else if (type1 === '✌️' && type2 === '👊') {
-    return '👊'; // Jika ✌️ bertabrakan dengan 👊, 👊 yang menang
-  } else if (type1 === '👊' && type2 === '🤚') {
-    return '👊'; // Jika 👊 bertabrakan dengan 🤚, 👊 yang menang
-  } else if (type1 === '🤚' && type2 === '✌️') {
-    return '🤚'; // Jika 🤚 bertabrakan dengan ✌️, 🤚 yang menang
+    return '🤚'; // Jika 🤚 bertabrakan dengan 👊,  🤚 yang menang
   } else {
-    return type1; // Kembalikan type1 jika hasil imbang
-  }
-}
-
-// Fungsi untuk menentukan jenis objek yang kalah
-function getLoserType(type1, type2) {
-  if (type1 === '👊' && type2 === '✌️') {
-    return '✌️'; // Jika 👊 bertabrakan dengan ✌️, ✌️ yang kalah
-  } else if (type1 === '✌️' && type2 === '🤚') {
-    return '🤚'; // Jika ✌️ bertabrakan dengan 🤚, 🤚 yang kalah
-  } else if (type1 === '🤚' && type2 === '👊') {
-    return '👊'; // Jika 🤚 bertabrakan dengan 👊, 👊 yang kalah
-  } else if (type1 === '✌️' && type2 === '👊') {
-    return '✌️'; // Jika ✌️ bertabrakan dengan 👊, ✌️ yang kalah
-  } else if (type1 === '👊' && type2 === '🤚') {
-    return '🤚'; // Jika 👊 bertabrakan dengan 🤚, 🤚 yang kalah
-  } else if (type1 === '🤚' && type2 === '✌️') {
-    return '✌️'; // Jika 🤚 bertabrakan dengan ✌️, ✌️ yang kalah
-  } else {
-    return type1; // Kembalikan type1 jika hasil imbang
-  }
-}
-
-
-// Fungsi utama permainan yang menggabungkan langkah-langkah permainan
-function gameLoop() {
-  checkCollisions();
-  updatePositions();
-  drawGame();
-  if (hasGameEnded()) {
-    displayWinner();
-  } else {
-    requestAnimationFrame(gameLoop);
+    return null; // Jika hasil imbang, kembalikan null
   }
 }
 
@@ -92,10 +55,19 @@ function updatePositions() {
     particle.y += particle.speedY;
 
     // Batasi pergerakan objek agar tetap berada dalam area canvas
-    if (particle.x < 0 || particle.x > canvas.width - particleSize) {
+    if (particle.x < 0) {
+      particle.x = 0;
+      particle.speedX *= -1;
+    } else if (particle.x > canvas.width - particleSize) {
+      particle.x = canvas.width - particleSize;
       particle.speedX *= -1;
     }
-    if (particle.y < 0 || particle.y > canvas.height - particleSize) {
+
+    if (particle.y < 0) {
+      particle.y = 0;
+      particle.speedY *= -1;
+    } else if (particle.y > canvas.height - particleSize) {
+      particle.y = canvas.height - particleSize;
       particle.speedY *= -1;
     }
   });
@@ -117,15 +89,26 @@ function hasGameEnded() {
   return uniqueTypes.size === 1;
 }
 
+// Fungsi utama permainan yang menggabungkan langkah-langkah permainan
+function gameLoop() {
+  checkCollisions();
+  updatePositions();
+  drawGame();
+  if (hasGameEnded()) {
+    displayWinner();
+  } else {
+    requestAnimationFrame(gameLoop);
+  }
+}
+
 // Fungsi untuk menampilkan pemenang permainan
 function displayWinner() {
   const uniqueTypes = new Set(particles.map(particle => particle.type));
   const winnerType = [...uniqueTypes][0];
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.font = '30px Arial';
-  ctx.fillText(`Pemenang: ${winnerType}`, canvas.width / 2 - 70, canvas.height / 2);
+  ctx.fillText(`Pemenang: ${winnerType}`, canvas.width / 2, canvas.height / 2);
 }
 
-// Jalankan permainan
+// Memulai permainan
 gameLoop();
