@@ -35,14 +35,14 @@ function checkCollisions() {
 
 // Fungsi untuk menentukan jenis objek yang menang
 function getWinnerType(type1, type2) {
-  const typesOrder = ['👊', '🤚', '✌️'];
-  const index1 = typesOrder.indexOf(type1);
-  const index2 = typesOrder.indexOf(type2);
-
-  if ((index1 + 1) % 3 === index2) {
-    return type1; // Type1 (👊) menang
-  } else if ((index2 + 1) % 3 === index1) {
-    return type2; // Type2 (🤚) menang
+  if (type1 === '👊') {
+    return type1; // Jika 👊 menabrak apapun, 👊 yang menang
+  } else if (type2 === '👊') {
+    return type2; // Jika apapun menabrak 👊, 👊 yang menang
+  } else if (type1 === '✌️') {
+    return type2; // Jika ✌️ menabrak apa pun kecuali 👊, type2 (👊) yang menang
+  } else if (type2 === '✌️') {
+    return type1; // Jika apa pun kecuali 👊 menabrak ✌️, type1 (✌️) yang menang
   } else {
     return type1; // Kembalikan type1 jika hasil imbang
   }
