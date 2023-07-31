@@ -37,11 +37,17 @@ function checkCollisions() {
 // Fungsi untuk menentukan jenis objek yang menang
 function getWinnerType(type1, type2) {
   if (type1 === '👊' && type2 === '✌️') {
-    return '👊'; // Jika 👊 bertabrakan dengan ✌️,  👊 yang menang
+    return '👊'; // Jika 👊 bertabrakan dengan ✌️, 👊 yang menang
   } else if (type1 === '✌️' && type2 === '🤚') {
-    return '✌️'; // Jika ✌️ bertabrakan dengan 🤚,  ✌️ yang menang
+    return '✌️'; // Jika ✌️ bertabrakan dengan 🤚, ✌️ yang menang
   } else if (type1 === '🤚' && type2 === '👊') {
-    return '🤚'; // Jika 🤚 bertabrakan dengan 👊,  🤚 yang menang
+    return '🤚'; // Jika 🤚 bertabrakan dengan 👊, 🤚 yang menang
+  } else if (type1 === '✌️' && type2 === '👊') {
+    return '👊'; // Jika ✌️ bertabrakan dengan 👊, 👊 yang menang
+  } else if (type1 === '👊' && type2 === '🤚') {
+    return '👊'; // Jika 👊 bertabrakan dengan 🤚, 👊 yang menang
+  } else if (type1 === '🤚' && type2 === '✌️') {
+    return '🤚'; // Jika 🤚 bertabrakan dengan ✌️, 🤚 yang menang
   } else {
     return type1; // Kembalikan type1 jika hasil imbang
   }
@@ -50,15 +56,22 @@ function getWinnerType(type1, type2) {
 // Fungsi untuk menentukan jenis objek yang kalah
 function getLoserType(type1, type2) {
   if (type1 === '👊' && type2 === '✌️') {
-    return '✌️'; // Jika 👊 bertabrakan dengan ✌️,  ✌️ yang kalah
+    return '✌️'; // Jika 👊 bertabrakan dengan ✌️, ✌️ yang kalah
   } else if (type1 === '✌️' && type2 === '🤚') {
-    return '🤚'; // Jika ✌️ bertabrakan dengan 🤚,  🤚 yang kalah
+    return '🤚'; // Jika ✌️ bertabrakan dengan 🤚, 🤚 yang kalah
   } else if (type1 === '🤚' && type2 === '👊') {
-    return '👊'; // Jika 🤚 bertabrakan dengan 👊,  👊 yang kalah
+    return '👊'; // Jika 🤚 bertabrakan dengan 👊, 👊 yang kalah
+  } else if (type1 === '✌️' && type2 === '👊') {
+    return '✌️'; // Jika ✌️ bertabrakan dengan 👊, ✌️ yang kalah
+  } else if (type1 === '👊' && type2 === '🤚') {
+    return '🤚'; // Jika 👊 bertabrakan dengan 🤚, 🤚 yang kalah
+  } else if (type1 === '🤚' && type2 === '✌️') {
+    return '✌️'; // Jika 🤚 bertabrakan dengan ✌️, ✌️ yang kalah
   } else {
     return type1; // Kembalikan type1 jika hasil imbang
   }
 }
+
 
 // Fungsi utama permainan yang menggabungkan langkah-langkah permainan
 function gameLoop() {
