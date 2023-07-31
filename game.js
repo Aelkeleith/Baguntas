@@ -28,6 +28,7 @@ function checkCollisions() {
           particles[i].y + particleSize > particles[j].y &&
           particles[i].type !== particles[j].type) {
         particles[j].type = getWinnerType(particles[i].type, particles[j].type);
+        particles[i].type = getLoserType(particles[i].type, particles[j].type);
       }
     }
   }
@@ -36,13 +37,28 @@ function checkCollisions() {
 // Fungsi untuk menentukan jenis objek yang menang
 function getWinnerType(type1, type2) {
   if (type1 === '👊') {
-    return type1; // Jika 👊 menabrak apapun, 👊 yang menang
+    return type1; // Jika 👊 bertabrakan dengan apa pun, 👊 yang menang
   } else if (type2 === '👊') {
-    return type2; // Jika apapun menabrak 👊, 👊 yang menang
+    return type2; // Jika apa pun bertabrakan dengan 👊, 👊 yang menang
   } else if (type1 === '✌️') {
-    return type2; // Jika ✌️ menabrak apa pun kecuali 👊, type2 (👊) yang menang
+    return type1; // Jika ✌️ bertabrakan dengan apa pun, ✌️ yang menang
   } else if (type2 === '✌️') {
-    return type1; // Jika apa pun kecuali 👊 menabrak ✌️, type1 (✌️) yang menang
+    return type2; // Jika apa pun bertabrakan dengan ✌️, ✌️ yang menang
+  } else {
+    return type1; // Kembalikan type1 jika hasil imbang
+  }
+}
+
+// Fungsi untuk menentukan jenis objek yang kalah
+function getLoserType(type1, type2) {
+  if (type1 === '👊') {
+    return '✌️'; // Jika 👊 bertabrakan dengan apa pun, ✌️ yang kalah
+  } else if (type2 === '👊') {
+    return '✌️'; // Jika apa pun bertabrakan dengan 👊, ✌️ yang kalah
+  } else if (type1 === '✌️') {
+    return '🤚'; // Jika ✌️ bertabrakan dengan apa pun, 🤚 yang kalah
+  } else if (type2 === '✌️') {
+    return '🤚'; // Jika apa pun bertabrakan dengan ✌️, 🤚 yang kalah
   } else {
     return type1; // Kembalikan type1 jika hasil imbang
   }
@@ -53,7 +69,11 @@ function gameLoop() {
   checkCollisions();
   updatePositions();
   drawGame();
-  requestAnimationFrame(gameLoop);
+  if (hasGameEnded()) {
+    displayWinner();
+  } else {
+    requestAnimationFrame(gameLoop);
+  }
 }
 
 // Fungsi untuk mengupdate posisi objek
@@ -82,5 +102,12 @@ function drawGame() {
   });
 }
 
-// Jalankan permainan
-gameLoop();
+// Fungsi untuk mengecek apakah permainan telah berakhir (hanya satu jenis objek)
+function hasGameEnded() {
+  const uniqueTypes = new Set(particles.map(particle => particle.type));
+  return uniqueTypes.size === 1;
+}
+
+// Fungsi untuk menampilkan pemenang permainan
+function displayWinner() {
+  const winnerType = particles
