@@ -5,6 +5,7 @@ const objek = ["👊", "🤚", "✌️"];
 const jumlahAwal = 15;
 const width = 60;
 const height = 60;
+const fps = 5; // Ubah kecepatan animasi di sini
 
 let grid = [];
 
@@ -70,4 +71,4 @@ function playGame() {
 }
 
 setup();
-playGame();
+setInterval(playGame, 1000 / fps);
