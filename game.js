@@ -1,60 +1,73 @@
-var particles = [];
-var canvas = document.getElementById("canvas");
-var ctx = canvas.getContext("2d");
+const canvas = document.getElementById("gameCanvas");
+const ctx = canvas.getContext("2d");
 
-function createParticle() {
-  var particle = {
-    x: Math.random() * canvas.width,
-    y: Math.random() * canvas.height,
-    type: Math.random() * 3,
-  };
-  particles.push(particle);
-}
+const objek = ["👊", "🤚", "✌️"];
+const jumlahAwal = 15;
+const width = 60;
+const height = 60;
 
-function collide(particle1, particle2) {
-  if (particle1.type == particle2.type) {
-    return null;
-  } else {
-    return particle1.type;
-  }
-}
+let grid = [];
 
-function update() {
-  var newParticles = [];
-  for (var i = 0; i < particles.length; i++) {
-    var particle = particles[i];
-    var x = particle.x;
-    var y = particle.y;
-    var type = particle.type;
-
-    particle.x += Math.random() * 0.1;
-    particle.y += Math.random() * 0.1;
-
-    if (particle.x < 0 || particle.x > canvas.width) {
-      particle.x = 0;
+function setup() {
+    for (let i = 0; i < objek.length; i++) {
+        for (let j = 0; j < jumlahAwal; j++) {
+            grid.push(objek[i]);
+        }
     }
-    if (particle.y < 0 || particle.y > canvas.height) {
-      particle.y = 0;
-    }
-
-    var collision = collide(particles[i], particles[(i + 1) % particles.length]);
-    if (collision !== null) {
-      particle.type = collision;
-    }
-
-    newParticles.push(particle);
-  }
-  particles = newParticles;
+    shuffle(grid);
+    drawGrid();
 }
 
-window.addEventListener("keydown", function(event) {
-  if (event.keyCode == 32) {
-    createParticle();
-  }
-});
-
-setInterval(update, 100);
-
-for (var i = 0; i < 15; i++) {
-  createParticle();
+function drawGrid() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    let x = 20;
+    let y = 20;
+    for (let i = 0; i < grid.length; i++) {
+        ctx.fillText(grid[i], x, y);
+        x += width;
+        if (x >= canvas.width - width) {
+            x = 20;
+            y += height;
+        }
+    }
 }
+
+function shuffle(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
+
+function checkCollision() {
+    let changed = false;
+    for (let i = 0; i < grid.length - 1; i++) {
+        if (grid[i] !== grid[i + 1]) {
+            if ((grid[i] === "👊" && grid[i + 1] === "✌️") ||
+                (grid[i] === "✌️" && grid[i + 1] === "🤚") ||
+                (grid[i] === "🤚" && grid[i + 1] === "👊")) {
+                grid[i + 1] = grid[i];
+                changed = true;
+            }
+        }
+    }
+    if (changed) {
+        checkCollision();
+    }
+}
+
+function playGame() {
+    checkCollision();
+    drawGrid();
+    if (grid.filter((obj) => obj === "👊").length > 0 &&
+        grid.filter((obj) => obj === "🤚").length > 0 &&
+        grid.filter((obj) => obj === "✌️").length > 0) {
+        requestAnimationFrame(playGame);
+    } else {
+        const result = grid.filter(Boolean)[0];
+        alert("Permainan selesai! Jenis objek yang tersisa: " + result);
+    }
+}
+
+setup();
+playGame();
